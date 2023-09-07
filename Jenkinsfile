@@ -6,6 +6,7 @@ pipeline {
         stage('Deploy - Staging') {
             steps {
                 echo "Deploy -Staging Step"
+                sh 'mvn clean install'
             }
         }
 
@@ -28,9 +29,6 @@ pipeline {
         }
         success {
             echo 'I succeeded!'
-            mail to: 'levive@gmx.de',
-             subject: "Successful Pipeline: ${currentBuild.fullDisplayName}",
-             body: "Everythings good with ${env.BUILD_URL}"
         }
         unstable {
             echo 'I am unstable :/'

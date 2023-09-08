@@ -18,7 +18,7 @@ pipeline {
             }
             steps {
                 //sh './deploy.sh OMSTA'
-                echo 'Ich bin im Test! Mit dem Param ${specialParam}'
+                echo 'Ich bin im Test! Mit dem Param ${params.specialParam}'
             }
         }
 

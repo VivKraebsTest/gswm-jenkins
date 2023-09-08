@@ -39,17 +39,6 @@ pipeline {
                 //sh './start_omsrealtime.sh'
                 echo 'Ich bin im Master!'
             }
-
-            steps {
-                /* Deployment-Skripte mit Namenskonventionen für Konfig-Ordner:
-                   cfg_$HOSTNAME/config.xml
-                   cfg_$HOSTNAME/job.xml
-                   cfg_$HOSTNAME/routes/onlineinbox.xml
-                   ...
-                */
-                //sh './deploy.sh OMSPA'
-                echo 'Ich bin im Master, Step 2!'
-            }
         }
     }
     post {
@@ -59,7 +48,7 @@ pipeline {
             echo 'Verzeichnis gelöscht.'
         }
 
-        failed {
+        failure {
             echo 'Ich hab ein Problem!'
             deleteDir()
             echo 'Verzeichnis gelöscht.'

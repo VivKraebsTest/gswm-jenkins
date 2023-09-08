@@ -1,45 +1,57 @@
 pipeline {
-    agent any
+    agent { docker { image 'maven:3.9.4-eclipse-temurin-17-alpine' } }
     stages {
-        /* "Build" and "Test" stages omitted */
-
-        stage('Deploy - Staging') {
+        stage('build') {
             steps {
-                echo "Deploy -Staging Step"
                 sh 'mvn clean install'
             }
         }
-
-        stage('Sanity check') {
+        /* Pro Umgebung "Entwicklung, Test, Prod" ein Branch. */
+        stage('deploy test') {
+            when {
+                branch 'test'
+            }
             steps {
-                input "Does the staging environment look ok?"
+                //sh './deploy.sh OMSTA'
+                echo 'Ich bin im Test!'
             }
         }
 
-        stage('Deploy - Production') {
+        stage('deploy master') {
+            when {
+                branch 'master'
+            }
             steps {
-                echo "Deploy - Production Step"
+                // Stoppen der Anwendung
+                // evtl. REST-Aufruf / Skript-Aufruf
+                //curl 'http://omspneu.apps-p.d001.loc:4712/shutdown'
+                //sh './stop_omsrealtime.sh'
+                // Deployment des neuen Releases
+                /* Deployment-Skripte mit Namenskonventionen für Konfig-Ordner:
+                        cfg_$HOSTNAME/config.xml
+                        ...
+                    oder:
+                        cfg/$HOSTNAME/config.xml
+                        ...
+                */
+                //sh './deploy.sh OMSPNEU'
+                // Start der Anwendung
+                //sh './start_omsrealtime.sh'
+                echo 'Ich bin im Master!'
             }
         }
     }
     post {
         always {
-            echo 'One way or another, I have finished'
-            deleteDir() /* clean up our workspace */
+            echo 'Ich bin fertig!'
+            deleteDir()
+            echo 'Verzeichnis gelöscht.'
         }
-        success {
-            echo 'I succeeded!'
-        }
-        unstable {
-            echo 'I am unstable :/'
-        }
+
         failure {
-            mail to: 'levive@gmx.de',
-             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-             body: "Something is wrong with ${env.BUILD_URL}"
-        }
-        changed {
-            echo 'Things were different before...'
+            echo 'Ich hab ein Problem!'
+            deleteDir()
+            echo 'Verzeichnis gelöscht.'
         }
     }
 }

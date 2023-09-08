@@ -1,5 +1,10 @@
 pipeline {
     agent { docker { image 'maven:3.9.4-eclipse-temurin-17-alpine' } }
+    parameters{
+        string(name: 'specialParam', 
+               defaultValue: 'Test!',
+               description:'String Test Param')
+    }
     stages {
         stage('build') {
             steps {
@@ -13,7 +18,7 @@ pipeline {
             }
             steps {
                 //sh './deploy.sh OMSTA'
-                echo 'Ich bin im Test!'
+                echo 'Ich bin im Test! Mit dem Param ${specialParam}'
             }
         }
 

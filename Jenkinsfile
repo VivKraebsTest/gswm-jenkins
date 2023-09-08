@@ -12,7 +12,8 @@ pipeline {
                 branch 'test'
             }
             steps {
-                echo 'Ich bin im Test'
+                //sh './deploy.sh OMSTA'
+                echo 'Ich bin im Test!'
             }
         }
 
@@ -21,16 +22,22 @@ pipeline {
                 branch 'master'
             }
             steps {
+                // Stoppen der Anwendung
+                // evtl. REST-Aufruf / Skript-Aufruf
+                //curl 'http://omspneu.apps-p.d001.loc:4712/shutdown'
+                //sh './stop_omsrealtime.sh'
+                // Deployment des neuen Releases
                 /* Deployment-Skripte mit Namenskonventionen für Konfig-Ordner:
                         cfg_$HOSTNAME/config.xml
                         ...
-                   oder:
+                    oder:
                         cfg/$HOSTNAME/config.xml
                         ...
-
-
                 */
-               echo 'Ich bin im Test'
+                //sh './deploy.sh OMSPNEU'
+                // Start der Anwendung
+                //sh './start_omsrealtime.sh'
+                echo 'Ich bin im Master!'
             }
 
             steps {
@@ -40,7 +47,8 @@ pipeline {
                    cfg_$HOSTNAME/routes/onlineinbox.xml
                    ...
                 */
-                sh './deploy.sh OMSPA'
+                //sh './deploy.sh OMSPA'
+                echo 'Ich bin im Master, Step 2!'
             }
         }
     }
@@ -58,4 +66,3 @@ pipeline {
         }
     }
 }
-

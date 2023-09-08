@@ -19,8 +19,10 @@ pipeline {
             steps {
                 //sh './deploy.sh OMSTA'
                 echo "Ich bin im Test! Mit dem Param ${params.specialParam}"
-                if(params.specialParam == "Fall 1"){
-                    echo "Ich war in der Condition, wuhu"
+                script{
+                    if(params.specialParam == "Fall 1"){
+                        echo "Ich war in der Condition, wuhu"
+                    }
                 }
             }
         }
